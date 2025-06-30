@@ -1,0 +1,120 @@
+# playbooks/leaf_conf_docker_exec.yaml
+- name: Configurar los leafs
+  hosts: leafs
+  gather_facts: no
+  connection: local
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3 # https://docs.ansible.com/ansible-core/2.18/reference_appendices/interpreter_discovery.html
+
+  tasks:
+    - name: Habilitar IP forwarding
+      shell: docker exec {{ ansible_docker_container }} sysctl -w net.ipv4.ip_forward=1
+
+    - name: Cargar la configuración de las interfaces del nodo
+      shell: |
+        docker exec {{ ansible_docker_container }} vtysh \
+          -c "configure terminal" \
+          -c "interface {{ item.key }}" \
+          -c "ip address {{ item.value }}" \
+          -c "ip ospf area 0" \
+          -c "exit"
+      loop: "{{ interfaces | dict2items }}"
+      when: interfaces is defined
+
+    - name: Activar OSPF
+      shell: |
+        docker exec {{ ansible_docker_container }} vtysh \
+          -c "configure terminal" \
+          -c "router ospf" \
+          -c "redistribute connected" \
+          -c "exit"
+
+    - name: Configurar spines
+      shell: |
+        docker exec {{ ansible_docker_container }} vtysh \
+          -c "configure terminal" \
+          -c "router bgp 65100" \
+          -c "neighbor spines peer-group" \
+          -c "neighbor spines remote-as 65100" \
+          -c "neighbor spines update-source lo" \
+          -c "address-family l2vpn evpn" \
+          -c "neighbor spines activate" \
+          -c "exit-address-family" \
+          -c "exit" \
+          -c "exit"
+
+    - name: Configurar vecinos spines
+      shell: |
+        docker exec {{ ansible_docker_container }} vtysh \
+        -c "configure terminal" \
+        -c "router bgp 65100" \
+        -c "neighbor {{ item }} peer-group spines" \
+        -c "exit" \
+        -c "exit"
+      with_items: "{{ spines }}"
+      when: spines is defined
+
+    - name: Configurar servidores
+      shell: |
+        docker exec {{ ansible_docker_container}} vtysh \
+        -c "configure terminal" \
+        -c "router bgp 65100" \
+        -c "neighbor servers peer-group" \
+        -c "neighbor servers remote-as 65100" \
+        -c "neighbor servers update-source lo" \
+        -c "address-family l2vpn evpn" \
+        -c "neighbor servers route-reflector-client" \
+        -c "neighbor servers activate" \
+        -c "advertise-all-vni" \
+        -c "exit" \
+        -c "exit" \
+        -c "exit"   
+
+    - name: Configurar vecinos servidores 
+      shell: |
+        docker exec {{ ansible_docker_container }} vtysh \
+        -c "configure terminal" \
+        -c "router bgp 65100" \
+        -c "neighbor {{ item }} peer-group servers" \
+        -c "exit" \
+        -c "exit"
+      with_items: "{{ servers }}"
+      when: servers is defined  
+
+    - name: Crear el bridge br0 dentro de contenedor leaf
+      shell: |
+        docker exec {{ ansible_docker_container }} ip link add br0 type bridge
+        docker exec {{ ansible_docker_container }} ip link set br0 up
+
+    - name: Añadir puertos al bridge en contenedor leaf
+      shell: |
+        docker exec {{ ansible_docker_container }} bash -c "ip link set {{ item }} master br0 && ip link set {{ item }} up"
+      loop:
+        - eth5
+        - eth6
+        - eth7
+        - eth8
+        - eth9
+        - eth10
+        - eth11
+        - eth12
+        - eth13
+        - eth14
+        - eth15
+        - eth16
+
+    - name: Configurar interfaz br0 para servidores en el leaf
+      shell: |
+        docker exec {{ ansible_docker_container }} vtysh \
+          -c "configure terminal" \
+          -c "interface br0" \
+          -c "ip address {{ server_net_ip }}/24" \
+          -c "ip ospf area 0" \
+          -c "exit" \
+          -c "exit"
+      when: server_net_ip is defined
+
+    - name: Guardar la configuración en el contenedor leaf
+      shell: |
+        docker exec {{ ansible_docker_container }} vtysh -c "copy running-config startup-config"

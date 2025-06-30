@@ -1,0 +1,56 @@
+# playbooks/server_conf_docker_exec.yaml
+- name: Configurar los servidores
+  hosts: servers
+  gather_facts: no
+  connection: local
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+
+  tasks:
+
+    - name: Eliminamos la interfaz de gestion de ContainerLabs
+      shell: |
+        docker exec {{ ansible_docker_container }} vtysh \
+          -c "configure terminal" \
+          -c "interface eth0" \
+          -c "shutdown" \
+          -c "exit" \
+          -c "exit"
+
+    - name: Configurar IP del servidor
+      shell: |
+        docker exec {{ ansible_docker_container }} vtysh \
+          -c "configure terminal" \
+          -c "interface eth1" \
+          -c "ip address {{ server_net_ip }}/24" \
+          -c "exit" \
+          -c "ip route 0.0.0.0/0 {{ gateway }}" \
+          -c "exit"
+      when: server_net_ip is defined
+
+    - name: Configurar BGP del servidor
+      shell: |
+        docker exec {{ ansible_docker_container }} vtysh \
+          -c "configure terminal" \
+          -c "router bgp 65100" \
+          -c "neighbor leafs peer-group" \
+          -c "neighbor leafs remote-as 65100" \
+          -c "exit" \
+          -c "exit"
+
+    - name: Configurar vecinos leafs
+      shell: |
+        docker exec {{ ansible_docker_container }} vtysh \
+          -c "configure terminal" \
+          -c "router bgp 65100" \
+          -c "neighbor {{ leaf }} peer-group leafs" \
+          -c "address-family l2vpn evpn" \
+          -c "neighbor leafs activate" \
+          -c "advertise-all-vni" \
+          -c "exit" \
+          -c "exit" \
+          -c "exit"
+      
+    - name: Guardar configuración del servidor
+      shell: |
+        docker exec {{ ansible_docker_container }} vtysh -c "copy running-config startup-config"
