@@ -1,0 +1,55 @@
+PING 192.168.30.2 (192.168.30.2): 56 data bytes
+64 bytes from 192.168.30.2: seq=0 ttl=62 time=314.447 ms
+64 bytes from 192.168.30.2: seq=1 ttl=62 time=306.241 ms
+64 bytes from 192.168.30.2: seq=2 ttl=62 time=251.068 ms
+64 bytes from 192.168.30.2: seq=3 ttl=62 time=287.875 ms
+64 bytes from 192.168.30.2: seq=4 ttl=62 time=263.723 ms
+64 bytes from 192.168.30.2: seq=5 ttl=62 time=276.476 ms
+64 bytes from 192.168.30.2: seq=6 ttl=62 time=259.066 ms
+64 bytes from 192.168.30.2: seq=7 ttl=62 time=264.695 ms
+64 bytes from 192.168.30.2: seq=8 ttl=62 time=286.409 ms
+64 bytes from 192.168.30.2: seq=9 ttl=62 time=255.674 ms
+64 bytes from 192.168.30.2: seq=10 ttl=62 time=291.794 ms
+64 bytes from 192.168.30.2: seq=11 ttl=62 time=280.984 ms
+64 bytes from 192.168.30.2: seq=12 ttl=62 time=293.551 ms
+64 bytes from 192.168.30.2: seq=13 ttl=62 time=276.377 ms
+64 bytes from 192.168.30.2: seq=14 ttl=62 time=277.730 ms
+64 bytes from 192.168.30.2: seq=15 ttl=62 time=279.386 ms
+64 bytes from 192.168.30.2: seq=16 ttl=62 time=265.383 ms
+64 bytes from 192.168.30.2: seq=17 ttl=62 time=249.208 ms
+64 bytes from 192.168.30.2: seq=18 ttl=62 time=274.585 ms
+64 bytes from 192.168.30.2: seq=19 ttl=62 time=278.327 ms
+64 bytes from 192.168.30.2: seq=20 ttl=62 time=277.210 ms
+64 bytes from 192.168.30.2: seq=21 ttl=62 time=275.030 ms
+64 bytes from 192.168.30.2: seq=22 ttl=62 time=264.199 ms
+64 bytes from 192.168.30.2: seq=23 ttl=62 time=263.581 ms
+64 bytes from 192.168.30.2: seq=24 ttl=62 time=247.413 ms
+64 bytes from 192.168.30.2: seq=25 ttl=62 time=288.759 ms
+64 bytes from 192.168.30.2: seq=26 ttl=62 time=328.162 ms
+64 bytes from 192.168.30.2: seq=27 ttl=62 time=259.121 ms
+64 bytes from 192.168.30.2: seq=28 ttl=62 time=264.779 ms
+64 bytes from 192.168.30.2: seq=29 ttl=62 time=244.975 ms
+64 bytes from 192.168.30.2: seq=30 ttl=62 time=265.258 ms
+64 bytes from 192.168.30.2: seq=31 ttl=62 time=266.217 ms
+64 bytes from 192.168.30.2: seq=32 ttl=62 time=259.012 ms
+64 bytes from 192.168.30.2: seq=33 ttl=62 time=265.864 ms
+64 bytes from 192.168.30.2: seq=34 ttl=62 time=286.217 ms
+64 bytes from 192.168.30.2: seq=35 ttl=62 time=295.003 ms
+64 bytes from 192.168.30.2: seq=36 ttl=62 time=256.299 ms
+64 bytes from 192.168.30.2: seq=37 ttl=62 time=287.084 ms
+64 bytes from 192.168.30.2: seq=38 ttl=62 time=257.043 ms
+64 bytes from 192.168.30.2: seq=39 ttl=62 time=279.270 ms
+64 bytes from 192.168.30.2: seq=40 ttl=62 time=305.785 ms
+64 bytes from 192.168.30.2: seq=41 ttl=62 time=265.828 ms
+64 bytes from 192.168.30.2: seq=42 ttl=62 time=287.368 ms
+64 bytes from 192.168.30.2: seq=43 ttl=62 time=280.499 ms
+64 bytes from 192.168.30.2: seq=44 ttl=62 time=308.360 ms
+64 bytes from 192.168.30.2: seq=45 ttl=62 time=246.775 ms
+64 bytes from 192.168.30.2: seq=46 ttl=62 time=252.437 ms
+64 bytes from 192.168.30.2: seq=47 ttl=62 time=264.835 ms
+64 bytes from 192.168.30.2: seq=48 ttl=62 time=280.172 ms
+64 bytes from 192.168.30.2: seq=49 ttl=62 time=257.341 ms
+
+--- 192.168.30.2 ping statistics ---
+50 packets transmitted, 50 packets received, 0% packet loss
+round-trip min/avg/max = 244.975/274.257/328.162 ms

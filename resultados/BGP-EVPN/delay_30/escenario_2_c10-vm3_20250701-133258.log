@@ -1,0 +1,55 @@
+PING 192.168.10.4 (192.168.10.4): 56 data bytes
+64 bytes from 192.168.10.4: seq=0 ttl=64 time=245.741 ms
+64 bytes from 192.168.10.4: seq=1 ttl=64 time=251.380 ms
+64 bytes from 192.168.10.4: seq=2 ttl=64 time=248.632 ms
+64 bytes from 192.168.10.4: seq=3 ttl=64 time=255.585 ms
+64 bytes from 192.168.10.4: seq=4 ttl=64 time=268.097 ms
+64 bytes from 192.168.10.4: seq=5 ttl=64 time=267.709 ms
+64 bytes from 192.168.10.4: seq=6 ttl=64 time=258.233 ms
+64 bytes from 192.168.10.4: seq=7 ttl=64 time=267.001 ms
+64 bytes from 192.168.10.4: seq=8 ttl=64 time=285.951 ms
+64 bytes from 192.168.10.4: seq=9 ttl=64 time=276.965 ms
+64 bytes from 192.168.10.4: seq=10 ttl=64 time=272.652 ms
+64 bytes from 192.168.10.4: seq=11 ttl=64 time=255.506 ms
+64 bytes from 192.168.10.4: seq=12 ttl=64 time=251.075 ms
+64 bytes from 192.168.10.4: seq=13 ttl=64 time=269.029 ms
+64 bytes from 192.168.10.4: seq=14 ttl=64 time=249.115 ms
+64 bytes from 192.168.10.4: seq=15 ttl=64 time=268.056 ms
+64 bytes from 192.168.10.4: seq=16 ttl=64 time=260.178 ms
+64 bytes from 192.168.10.4: seq=17 ttl=64 time=271.182 ms
+64 bytes from 192.168.10.4: seq=18 ttl=64 time=261.546 ms
+64 bytes from 192.168.10.4: seq=19 ttl=64 time=275.997 ms
+64 bytes from 192.168.10.4: seq=20 ttl=64 time=296.641 ms
+64 bytes from 192.168.10.4: seq=21 ttl=64 time=252.237 ms
+64 bytes from 192.168.10.4: seq=22 ttl=64 time=265.795 ms
+64 bytes from 192.168.10.4: seq=23 ttl=64 time=286.890 ms
+64 bytes from 192.168.10.4: seq=24 ttl=64 time=259.942 ms
+64 bytes from 192.168.10.4: seq=25 ttl=64 time=299.821 ms
+64 bytes from 192.168.10.4: seq=26 ttl=64 time=268.462 ms
+64 bytes from 192.168.10.4: seq=27 ttl=64 time=273.432 ms
+64 bytes from 192.168.10.4: seq=28 ttl=64 time=270.736 ms
+64 bytes from 192.168.10.4: seq=29 ttl=64 time=283.726 ms
+64 bytes from 192.168.10.4: seq=30 ttl=64 time=250.663 ms
+64 bytes from 192.168.10.4: seq=31 ttl=64 time=318.332 ms
+64 bytes from 192.168.10.4: seq=32 ttl=64 time=266.274 ms
+64 bytes from 192.168.10.4: seq=33 ttl=64 time=255.798 ms
+64 bytes from 192.168.10.4: seq=34 ttl=64 time=270.481 ms
+64 bytes from 192.168.10.4: seq=35 ttl=64 time=260.310 ms
+64 bytes from 192.168.10.4: seq=36 ttl=64 time=282.097 ms
+64 bytes from 192.168.10.4: seq=37 ttl=64 time=291.368 ms
+64 bytes from 192.168.10.4: seq=38 ttl=64 time=246.283 ms
+64 bytes from 192.168.10.4: seq=39 ttl=64 time=261.509 ms
+64 bytes from 192.168.10.4: seq=40 ttl=64 time=246.999 ms
+64 bytes from 192.168.10.4: seq=41 ttl=64 time=279.615 ms
+64 bytes from 192.168.10.4: seq=42 ttl=64 time=256.770 ms
+64 bytes from 192.168.10.4: seq=43 ttl=64 time=258.040 ms
+64 bytes from 192.168.10.4: seq=44 ttl=64 time=300.589 ms
+64 bytes from 192.168.10.4: seq=45 ttl=64 time=254.260 ms
+64 bytes from 192.168.10.4: seq=46 ttl=64 time=263.254 ms
+64 bytes from 192.168.10.4: seq=47 ttl=64 time=250.280 ms
+64 bytes from 192.168.10.4: seq=48 ttl=64 time=250.121 ms
+64 bytes from 192.168.10.4: seq=49 ttl=64 time=250.515 ms
+
+--- 192.168.10.4 ping statistics ---
+50 packets transmitted, 50 packets received, 0% packet loss
+round-trip min/avg/max = 245.741/266.617/318.332 ms
