@@ -1,4 +1,3 @@
-# playbooks/spine_conf_docker_exec.yaml
 - name: Configurar los spines
   hosts: spines
   gather_facts: no

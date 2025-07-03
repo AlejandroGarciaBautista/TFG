@@ -2,7 +2,7 @@ import os
 import json
 import ipaddress
 
-# --- Paths a los ficheros ---
+# --- Rutas a los ficheros ---
 BASE_DIR     = os.path.dirname(__file__)
 VLAN_FILE    = os.path.join(BASE_DIR, 'vlans.json')
 ALLOWED_FILE = os.path.join(BASE_DIR, 'allowed_communications.json')

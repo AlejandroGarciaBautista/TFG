@@ -14,7 +14,6 @@
     - name: Habilitar IP forwarding
       shell: docker exec {{ ansible_docker_container }} sysctl -w net.ipv4.ip_forward=1
     
-    # ▼ 2. NUEVO bloque: prepara loopback, VRF, L3-VNI y bridges L2
     - name: "Preparar dataplane EVPN/IRB (una vez por host)"
       block:
         - name: Loopback VTEP
@@ -49,7 +48,6 @@
             docker exec {{ ansible_docker_container }} ip link set br{{ vxlan_id }} up
       run_once: false   # se ejecuta por cada host
 
-    # ▼ 3. MODIFICA tu task existente: usa br{{ vxlan_id }} en lugar de br0
     - name: Crea una simulación de máquina virtual
       shell: |
         docker exec {{ansible_docker_container}} ip netns add {{ns_name}}

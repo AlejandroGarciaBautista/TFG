@@ -1,4 +1,3 @@
-# playbooks/server_conf_docker_exec.yaml
 - name: Configurar los servidores
   hosts: servers
   gather_facts: no

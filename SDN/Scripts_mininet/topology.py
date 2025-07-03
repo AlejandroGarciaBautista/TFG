@@ -7,7 +7,74 @@ from mininet.log import setLogLevel
 import subprocess
 import requests
 
+import time
+import threading
+import os
+from datetime import datetime
+
 API_URL = f'http://192.168.56.101:8080/hosts'
+
+def launch_ping_tests(net):
+    os.makedirs("resultados", exist_ok=True)
+
+    def lanzar_ping(host, ns, destino):
+        cmd = f"ip netns exec {ns} ping -c 50 {destino}"
+        print(f"[PING] {ns} a {destino}")
+        result = host.cmd(cmd)
+        return result
+
+    def generar_trafico(host, ns, destino):
+        cmd = f"ip netns exec {ns} ping {destino}"
+        print(f"[TRAFICO] {ns} a {destino}")
+        return host.popen(cmd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+    escenarios = {
+        "escenario_1": ["h20-C10-vm1", "h25-C10-vm1"],
+        "escenario_2": ["h20-C10-vm1", "h25-C10-vm1", "h40-C30-vm1", "h1-C10-vm2"]
+    }
+
+    destinos = {
+        "h1-C10-vm2": "10.0.10.2",
+        "h20-C10-vm1": "10.0.10.3",
+        "h40-C30-vm1": "10.0.30.1"
+    }
+
+    cliente_ns = "h1-C10-vm1"
+    cliente_host = net.get("h1")
+
+    # Escenario base sin tráfico
+    lanzar_ping(cliente_host, cliente_ns, '10.0.10.2')
+    print("\n--- Ejecutando escenario_0 ---\n")
+    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    for nombre_dest, ip_dest in destinos.items():
+        salida = lanzar_ping(cliente_host, cliente_ns, ip_dest)
+        with open(f"resultados/escenario_0_{nombre_dest}_{timestamp}.log", "w") as f:
+            f.write(salida)
+    print("--- Fin de escenario_0 ---\n")
+
+    # Escenarios con tráfico
+    for nombre_escenario, generadoras in escenarios.items():
+        print(f"\n--- Ejecutando {nombre_escenario} ---\n")
+        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+
+        procesos = []
+        for ns in generadoras:
+            h = ns.split("-")[0]
+            procesos.append(generar_trafico(net.get(h), ns, "10.0.10.2"))
+        time.sleep(5)  # estabilizar tráfico
+
+        for nombre_dest, ip_dest in destinos.items():
+            salida = lanzar_ping(cliente_host, cliente_ns, ip_dest)
+            with open(f"resultados/{nombre_escenario}_{nombre_dest}_{timestamp}.log", "w") as f:
+                f.write(salida)
+
+        for p in procesos:
+            p.terminate()
+        time.sleep(1)
+        print(f"--- Fin de {nombre_escenario} ---\n")
+
+
+
 
 def register_host(net, host):
     ip  = host.IP()
@@ -103,18 +170,18 @@ def create_spine_leaf_topology(spine_switches, leaf_switches, hosts_per_leaf, li
     # Agregar el controlador remoto
     c0 = net.addController('c0', controller=RemoteController, ip=controller_ip, port=6633, protocols="OpenFlow13")
 
-    # Crear switches spine y leaf con nombres más claros
+    # Crear switches spine y leaf
     spines = [net.addSwitch(f"spine{i+1}", dpid=f"{10000000000 + i+1:016x}", protocols="OpenFlow13") for i in range(spine_switches)]
     leaves = [net.addSwitch(f"leaf{i+1}", dpid=f"{20000000000 + i+1:016x}", protocols="OpenFlow13") for i in range(leaf_switches)]
 
     uplinks = spine_switches
     if redundancy: uplinks = uplinks * 2
-    # Conectar switches leaf a los switches spine con redundancia
+    # Conectar switches leaf a los switches spine con/sin redundancia
     for leaf in leaves:
         for spine in spines:
-            net.addLink(leaf, spine, cls=TCLink, bw=link_bandwidth, htb=True)
+            net.addLink(leaf, spine, cls=TCLink, bw=link_bandwidth, htb=True, delay="1.5ms")
             if redundancy: 
-                net.addLink(leaf, spine, cls=TCLink, bw=link_bandwidth, htb=True)
+                net.addLink(leaf, spine, cls=TCLink, bw=link_bandwidth, htb=True, delay="1.5ms")
 
     bw_leaf2host = (3 * (uplinks * link_bandwidth)) / hosts_per_leaf
     if bw_leaf2host > 1000: 
@@ -127,7 +194,7 @@ def create_spine_leaf_topology(spine_switches, leaf_switches, hosts_per_leaf, li
             host = net.addHost(f"h{host_count}")
             net.addLink(
                 host, leaf, 
-                cls=TCLink, bw=bw_leaf2host, htb=True
+                cls=TCLink, bw=bw_leaf2host, htb=True, delay="1.5ms"
                 )
             host_count += 1
 
@@ -139,7 +206,7 @@ def create_spine_leaf_topology(spine_switches, leaf_switches, hosts_per_leaf, li
         register_host(net, host)
 
 
-    # --- CONFIGURACIÓN DE UN ÚNICO BRIDGE (br0), NETNS Y VETH POR HOST -----
+    # --- SIMULACIÖN DE MÄQUINAS VIRTUALES -----
     hosts_vlan = {
         'h1' : {10: ['10.0.10.1/24', '10.0.10.2/24']},
         'h20': {10: ['10.0.10.3/24'], 20: ['10.0.20.1/24']},
@@ -189,10 +256,13 @@ def create_spine_leaf_topology(spine_switches, leaf_switches, hosts_per_leaf, li
                 host.cmd(f'ip netns exec {vm_ns} ip route add default via 10.0.{vlan}.254 dev {veth_v}')
 
                 register_vm(net, host, vm_ns, veth_v, ip_addr.split('/')[0])
+    
+    # Lanzar pruebas de ping
+    # launch_ping_tests(net)
 
     # Al salir, limpiar namespaces
     try:
-        CLI(net)
+        CLI(net)  
     finally:
         net.stop()
         cleanup_netns()

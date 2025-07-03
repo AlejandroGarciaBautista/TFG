@@ -1,4 +1,3 @@
-# playbooks/leaf_conf_docker_exec.yaml
 - name: Configurar los leafs
   hosts: leafs
   gather_facts: no

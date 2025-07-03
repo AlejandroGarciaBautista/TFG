@@ -1,7 +1,6 @@
 import yaml
 import subprocess
 
-# Cargar el fichero topology.yml
 with open("topology.yml", "r") as file:
     data = yaml.safe_load(file)
 

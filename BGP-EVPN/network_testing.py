@@ -4,9 +4,10 @@ from datetime import datetime
 
 # Escenarios de tráfico hacia c10-vm1
 escenarios = {
-    "escenario_1": ["c10-vm3", "c10-vm4"],  # 2 VMs
-    "escenario_2": ["c10-vm3", "c10-vm4", "c30-vm1", "c10-vm2"]  # 4 VMs
+    "escenario_1": ["c10-vm3", "c10-vm4"],
+    "escenario_2": ["c10-vm3", "c10-vm4", "c30-vm1", "c10-vm2"]
 }
+
 # Destinos para los pings desde c10-vm1
 destinos = {
     "c10-vm2": "192.168.10.3",
@@ -14,7 +15,7 @@ destinos = {
     "c30-vm1": "192.168.30.2"
 }
 
-# Mapeo namespace → contenedor
+# Mapeo namespace a contenedor
 ns_to_container = {
     "c10-vm1": "clab-tfg-frr-ansible-h1",
     "c10-vm2": "clab-tfg-frr-ansible-h1",

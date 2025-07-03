@@ -157,7 +157,7 @@ class TopologyManager(app_manager.RyuApp):
             u, v = selected_path[0], selected_path[1]
             edges_data = list(self.graph.get_edge_data(u, v).items())
 
-            # Si no hay enlaces, retorna 0 (esto no debería pasar en caminos válidos)
+            # Si no hay enlaces, retorna 0
             if not edges_data:
                 self.logger.warning(f"No hay enlaces físicos entre {u} y {v}")
                 return 0
